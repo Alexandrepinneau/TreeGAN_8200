@@ -1,9 +1,12 @@
 from __future__ import print_function
+import os
+os.environ['CUDA_ENABLE_DEVICES'] = '0'
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
 import numpy as np
 import torch.nn.functional as F
+from numba import cuda as cud
 
 """PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation"
     github code  : (https://github.com/charlesq34/pointnet)
@@ -30,7 +33,13 @@ class STN3d(nn.Module):
 
 
     def forward(self, x):
+        device = cud.get_current_device()
+        device.reset()
         batchsize = x.size()[0]
+        torch.backends.cudnn.enabled = False
+        torch.cuda.set_device(0)
+        # print(self.conv1(x).shape)
+        # print(self.bn1(self.conv1(x)))
         x = F.relu(self.bn1(self.conv1(x)))
         x = F.relu(self.bn2(self.conv2(x)))
         x = F.relu(self.bn3(self.conv3(x)))

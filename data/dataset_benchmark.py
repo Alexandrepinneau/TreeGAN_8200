@@ -134,8 +134,8 @@ class BenchmarkDataset(data.Dataset):
     def __init__(self, root, npoints=2500, uniform=False, classification=False, class_choice=None):
         self.npoints = npoints
         self.root = root
-       # dir_point = os.path.join(self.root, 'points')    
-        dir_point = self.root
+        dir_point = os.path.join(self.root, 'points')    
+        # dir_point = self.root
         fns = sorted(os.listdir(dir_point))
         
         
