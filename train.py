@@ -143,7 +143,7 @@ class TreeGAN():
                     if len(metric['FPD']) > 0:
                         self.vis.line(X=np.arange(len(metric['FPD'])), Y=np.array(metric['FPD']), win=3, 
                                       opts={'title': "Frechet Pointcloud Distance", 'legend': ["{} / FPD best : {:.6f}".format(np.argmin(metric['FPD']), np.min(metric['FPD']))]})
-
+                                      
                     print('Figures are saved.')
             
             # ---------------- Frechet Pointcloud Distance --------------- #

@@ -11,7 +11,7 @@ from arguments import Arguments
 
 
 import time
-#import visdom
+# import visdom
 import numpy as np
 
 
@@ -131,6 +131,7 @@ class TreeGAN():
                     tree = [z]
                     fake_point = Gen.G(tree).detach()
                     generated_point = Gen.G.getPointcloud().cpu().detach().numpy()
+
                     new_f = visualize_3d(generated_point, fig=new_f, num=flag, angles=angles, row_no=row_no+1, rows=len(alpha))
                     flag += len(angles)
 
