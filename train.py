@@ -13,6 +13,8 @@ import time
 import visdom
 import numpy as np
 
+import os
+
 class TreeGAN():
     def __init__(self, args):
         self.args = args
@@ -180,7 +182,9 @@ class TreeGAN():
 
 if __name__ == '__main__':
     args = Arguments().parser().parse_args()
-
+    #os.environ["CUDA_VISIBLE_DEVICES"]=''
+    print(torch.__version__)
+    print(torch.cuda.is_available())
     args.device = torch.device('cuda:'+str(args.gpu) if torch.cuda.is_available() else 'cpu')
     torch.cuda.set_device(args.device)
 
