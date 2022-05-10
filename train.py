@@ -51,7 +51,7 @@ class TreeGAN():
                            (172,113,161),(202,174,199),(145,35,132),(201,47,133),
                            (229,0,123),(225,106,112),(163,38,42),(128,128,128)])
         colors = colors[np.random.choice(len(colors), color_num, replace=False)]
-        label = torch.stack([torch.ones(chunk_size*4).type(torch.LongTensor) * inx for inx in range(1,int(color_num)+1)], dim=0).view(-1)
+        label = torch.stack([torch.ones(chunk_size).type(torch.LongTensor) * inx for inx in range(1,int(color_num)+1)], dim=0).view(-1)
 
         epoch_log = 0
         
@@ -113,6 +113,10 @@ class TreeGAN():
                 tree = [z]
                 
                 fake_point = self.G(tree)
+                # with torch.no_grad():
+                #     fake_point_clone = fake_point.clone()
+                #     fake_point_clone.resize_(1, 2048, 3)
+
                 G_fake = self.D(fake_point)
                 G_fakem = G_fake.mean()
                 
@@ -131,13 +135,17 @@ class TreeGAN():
 
                 if _iter % 10 == 0:
                     generated_point = self.G.getPointcloud()
+                    with torch.no_grad():
+                        generated_point_clone = generated_point.clone()
+                        generated_point_clone.resize_(2048, 3)
+
                     plot_X = np.stack([np.arange(len(loss_log[legend])) for legend in loss_legend], 1)
                     plot_Y = np.stack([np.array(loss_log[legend]) for legend in loss_legend], 1)
 
                     self.vis.line(X=plot_X, Y=plot_Y, win=1,
                                   opts={'title': 'TreeGAN Loss', 'legend': loss_legend, 'xlabel': 'Iteration', 'ylabel': 'Loss'})
 
-                    self.vis.scatter(X=generated_point[:,torch.LongTensor([2,0,1])], Y=label, win=2,
+                    self.vis.scatter(X=generated_point_clone[:,torch.LongTensor([2,0,1])], Y=label, win=2,
                                      opts={'title': "Generated Pointcloud", 'markersize': 2, 'markercolor': colors, 'webgl': True})
 
                     if len(metric['FPD']) > 0:
@@ -154,7 +162,7 @@ class TreeGAN():
                     tree = [z]
                     with torch.no_grad():
                         sample = self.G(tree).cpu()
-                    fake_pointclouds = torch.cat((fake_pointclouds, sample), dim=0)
+                    fake_pointclouds = torch.cat((fake_pointclouds, sample.resize_(1, 2048, 3)), dim=0)
 
                 fpd = calculate_fpd(fake_pointclouds, statistic_save_path=self.args.FPD_path, batch_size=100, dims=1808, device=self.args.device)
                 metric['FPD'].append(fpd)

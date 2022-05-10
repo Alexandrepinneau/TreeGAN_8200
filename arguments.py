@@ -7,13 +7,13 @@ class Arguments:
         # Dataset arguments
         self._parser.add_argument('--dataset_path', type=str, default='./shapenetcore_partanno_segmentation_benchmark_v0/03001627', help='Dataset file path.')
         self._parser.add_argument('--class_choice', type=str, default='Chair', help='Select one class to generate. [Airplane, Chair, ...] (default:all_class)')
-        self._parser.add_argument('--batch_size', type=int, default=20, help='Integer value for batch size.')
+        self._parser.add_argument('--batch_size', type=int, default=2, help='Integer value for batch size.')
         self._parser.add_argument('--point_num', type=int, default=2048, help='Integer value for number of points.')
 
         # Training arguments
         self._parser.add_argument('--gpu', type=int, default=0, help='GPU number to use.')
         self._parser.add_argument('--epochs', type=int, default=2000, help='Integer value for epochs.')
-        self._parser.add_argument('--lr', type=float, default=1e-4, help='Float value for learning rate.')
+        self._parser.add_argument('--lr', type=float, default=2e-3, help='Float value for learning rate.')
         self._parser.add_argument('--ckpt_path', type=str, default='./model/checkpoints/', help='Checkpoint path.')
         self._parser.add_argument('--ckpt_save', type=str, default='tree_ckpt_', help='Checkpoint name to save.')
         self._parser.add_argument('--ckpt_load', type=str, help='Checkpoint name to load. (default:None)')
